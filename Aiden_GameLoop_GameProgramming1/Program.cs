@@ -59,6 +59,17 @@ namespace Aiden_GameLoop_GameProgramming1
 
                 Update();
 
+            if(isDead)
+            {
+                Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You Have Died!\n");
+
+                Console.WriteLine("Press Any Key To Quit...");
+                Console.ReadKey(true);
+            }
+
 
         }
 
@@ -99,10 +110,7 @@ namespace Aiden_GameLoop_GameProgramming1
                         if (Math.Abs(PlayerPosition.Item2 - SharkPosition.Item2) < 1 && Math.Abs(PlayerPosition.Item1 - SharkPosition.Item1) < 1)
                         {
                             isDead = true;
-
                             Console.BackgroundColor = ConsoleColor.Black;
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("You Have Died!");
                         }
 
                     }
@@ -194,14 +202,14 @@ namespace Aiden_GameLoop_GameProgramming1
                     {
                         if (Map[i, j] == '-')
                         {
-                            Console.BackgroundColor = ConsoleColor.Yellow;
+                            Console.BackgroundColor = ConsoleColor.Green;
                             isOnIsland = true;
                         }
                         else
                         {
                             isOnIsland = false;
                         }
-                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.Write(Character);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
@@ -209,7 +217,7 @@ namespace Aiden_GameLoop_GameProgramming1
                     {
                         if (Map[i, j] == '-')
                         {
-                            Console.BackgroundColor = ConsoleColor.Yellow;
+                            Console.BackgroundColor = ConsoleColor.Green;
                         }
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write(Shark);
@@ -222,8 +230,8 @@ namespace Aiden_GameLoop_GameProgramming1
                     }
                     else if (Map[i, j] == '-')
                     {
-                        Console.BackgroundColor = ConsoleColor.Yellow;
-                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write(Map[i, j]);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
