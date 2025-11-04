@@ -19,15 +19,16 @@ namespace Aiden_GameLoop_GameProgramming1
 
         static float NewSharkPositionX = SharkPosition.Item2;
         static float NewSharkPositionY = SharkPosition.Item1;
-        static float SharkSpeed = 0.4f;
+        static float SharkSpeed = 0.2f;
 
         static bool isDead = false;
+        static bool isOnIsland = false;
 
         static char[,] Map = { {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
+                               {' ', ' ', '-', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
+                               {' ', '-', '-', '-', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
+                               {' ', '-', '-', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
@@ -69,28 +70,33 @@ namespace Aiden_GameLoop_GameProgramming1
                 float SharkDistanceY = PlayerPosition.Item1 - SharkPosition.Item1;
 
                 float Distance = (float)Math.Sqrt(SharkDistanceX * SharkDistanceX + SharkDistanceY * SharkDistanceY);
-                if (Distance > 0)
+
+                if(!isOnIsland)
                 {
-                    NewSharkPositionX += SharkDistanceX / Distance * SharkSpeed;
-                    NewSharkPositionY += SharkDistanceY / Distance * SharkSpeed;
-
-                    float NewSharkX = 0;
-                    float NewSharkY = 0;
-
-                    NewSharkX = (float)Math.Round(NewSharkPositionX);
-                    NewSharkY = (float)Math.Round(NewSharkPositionY);
-
-                    SharkPosition = ((int)NewSharkY, (int)NewSharkX);
-
-                    if (Math.Abs(PlayerPosition.Item2 - SharkPosition.Item2) < 1 && Math.Abs(PlayerPosition.Item1 - SharkPosition.Item1) < 1)
+                    if (Distance > 0)
                     {
-                        isDead = true;
+                        NewSharkPositionX += SharkDistanceX / Distance * SharkSpeed;
+                        NewSharkPositionY += SharkDistanceY / Distance * SharkSpeed;
 
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("You Have Died!");
+                        float NewSharkX = 0;
+                        float NewSharkY = 0;
+
+                        NewSharkX = (float)Math.Round(NewSharkPositionX);
+                        NewSharkY = (float)Math.Round(NewSharkPositionY);
+
+                        SharkPosition = ((int)NewSharkY, (int)NewSharkX);
+
+                        if (Math.Abs(PlayerPosition.Item2 - SharkPosition.Item2) < 1 && Math.Abs(PlayerPosition.Item1 - SharkPosition.Item1) < 1)
+                        {
+                            isDead = true;
+
+                            Console.BackgroundColor = ConsoleColor.Black;
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("You Have Died!");
+                        }
                     }
                 }
+                
             }
         }
 
@@ -102,21 +108,43 @@ namespace Aiden_GameLoop_GameProgramming1
             {
                 for (int j = 0; j < Map.GetLength(1); j++)
                 {
-                    Console.BackgroundColor = ConsoleColor.DarkBlue;
 
                     if (j == PlayerPosition.Item2 && i == PlayerPosition.Item1)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
+                        if (Map[i, j] == '-')
+                        {
+                            Console.BackgroundColor = ConsoleColor.Yellow;
+                            isOnIsland = true;
+                        }
+                        else
+                        {
+                            isOnIsland = false;
+                        }
+                            Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write(Character);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
                     else if (j == SharkPosition.Item2 && i == SharkPosition.Item1)
                     {
+                        if (Map[i, j] == '-')
+                        {
+                            Console.BackgroundColor = ConsoleColor.Yellow;
+                        }
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write(Shark);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
-                    else
+                    else if (Map[i, j] == ' ')
                     {
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.Write(Map[i, j]);
+                    }
+                    else if (Map[i, j] == '-')
+                    {
+                        Console.BackgroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(Map[i, j]);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
                 }
 
