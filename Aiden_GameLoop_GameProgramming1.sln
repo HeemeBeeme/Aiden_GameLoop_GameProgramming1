@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36511.14 d17.14
+VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aiden_GameLoop_GameProgramming1", "Aiden_GameLoop_GameProgramming1\Aiden_GameLoop_GameProgramming1.csproj", "{1F2EB64C-4DAC-4CBA-B009-AFDD82A0E489}"
 EndProject

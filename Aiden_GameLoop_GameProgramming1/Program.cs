@@ -13,13 +13,18 @@ namespace Aiden_GameLoop_GameProgramming1
         static char Shark = '^';
 
         static int FrameTime = 34;
+        static int movetime = 0;
 
         static (int, int) SharkPosition = (7, 20);
         static (int, int) PlayerPosition = (5, 4);
 
         static float NewSharkPositionX = SharkPosition.Item2;
         static float NewSharkPositionY = SharkPosition.Item1;
+
         static float SharkSpeed = 0.2f;
+
+        static float NewSharkX = 0;
+        static float NewSharkY = 0;
 
         static bool isDead = false;
         static bool isOnIsland = false;
@@ -32,11 +37,11 @@ namespace Aiden_GameLoop_GameProgramming1
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
-                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
+                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-',},
+                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', '-', '-', '-',},
+                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', '-', '-', '-',},
+                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', '-', '-', '-', '-',},
+                               {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', '-', '-', '-', '-', '-',},
         };
 
         static void Main(string[] args)
@@ -78,13 +83,18 @@ namespace Aiden_GameLoop_GameProgramming1
                         NewSharkPositionX += SharkDistanceX / Distance * SharkSpeed;
                         NewSharkPositionY += SharkDistanceY / Distance * SharkSpeed;
 
-                        float NewSharkX = 0;
-                        float NewSharkY = 0;
-
                         NewSharkX = (float)Math.Round(NewSharkPositionX);
                         NewSharkY = (float)Math.Round(NewSharkPositionY);
 
-                        SharkPosition = ((int)NewSharkY, (int)NewSharkX);
+                        if (Map[(int)NewSharkY, (int)NewSharkX] == ' ')
+                        {
+                            SharkPosition = ((int)NewSharkY, (int)NewSharkX);
+                        }
+                        else
+                        {
+                            NewSharkPositionX = SharkPosition.Item2;
+                            NewSharkPositionY = SharkPosition.Item1;
+                        }
 
                         if (Math.Abs(PlayerPosition.Item2 - SharkPosition.Item2) < 1 && Math.Abs(PlayerPosition.Item1 - SharkPosition.Item1) < 1)
                         {
@@ -94,7 +104,78 @@ namespace Aiden_GameLoop_GameProgramming1
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("You Have Died!");
                         }
+
                     }
+                }
+                else
+                {
+                    if (movetime == 2)
+                    {
+                        Random SharkMovementRnD = new Random();
+
+                        float SharkMovement = SharkMovementRnD.Next(0, 4);
+
+                        //0 = up
+                        //1 = down
+                        //2 = left
+                        //3 = right
+
+                        NewSharkPositionX = SharkPosition.Item2;
+                        NewSharkPositionY = SharkPosition.Item1;
+
+                        switch (SharkMovement)
+                        {
+                            case 0:
+                                if(NewSharkPositionY > 0)
+                                {
+                                    if (Map[(int)NewSharkPositionY - 1, (int)NewSharkPositionX] == ' ' && NewSharkPositionY > 0)
+                                    {
+                                        NewSharkPositionY--;
+                                    }
+                                }
+                                break;
+
+                            case 1:
+                                if(NewSharkPositionY < Map.GetLength(0) - 1)
+                                {
+                                    if (Map[(int)NewSharkPositionY + 1, (int)NewSharkPositionX] == ' ' && NewSharkPositionY < Map.GetLength(0))
+                                    {
+                                        NewSharkPositionY++;
+                                    }
+                                }
+                                break;
+
+                            case 2:
+                                if(NewSharkPositionX > 0)
+                                {
+                                    if (Map[(int)NewSharkPositionY, (int)NewSharkPositionX - 1] == ' ' && NewSharkPositionX > 0)
+                                    {
+                                        NewSharkPositionX--;
+                                    }
+                                }
+                                break;
+
+                            case 3:
+                                if(NewSharkPositionX <  Map.GetLength(1) - 1)
+                                {
+                                    if (Map[(int)NewSharkPositionY, (int)NewSharkPositionX + 1] == ' ' && NewSharkPositionX < Map.GetLength(1) - 1)
+                                    {
+                                        NewSharkPositionX++;
+                                    }
+                                }
+                                break;
+                        }
+
+                        SharkPosition = ((int)NewSharkPositionY, (int)NewSharkPositionX);
+                        movetime = 0;
+
+                    }
+                    else
+                    {
+                        Thread.Sleep(FrameTime);
+                        movetime++;
+                    }
+
                 }
                 
             }
