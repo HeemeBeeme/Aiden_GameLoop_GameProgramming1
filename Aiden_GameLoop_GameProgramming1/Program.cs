@@ -25,7 +25,7 @@ namespace Aiden_GameLoop_GameProgramming1
         static float NewSharkPositionX = SharkPosition.Item2;
         static float NewSharkPositionY = SharkPosition.Item1;
 
-        static float SharkSpeed = 0.2f;
+        static float SharkSpeed = 0.4f;
 
         static float NewSharkX = 0;
         static float NewSharkY = 0;
