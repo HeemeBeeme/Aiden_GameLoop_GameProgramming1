@@ -35,11 +35,6 @@ namespace Aiden_GameLoop_GameProgramming1
 
         static Random TreasureSpawnChanceRnD = new Random();
 
-        static List<(int, int)> TreasureLocation = new List<(int, int)>
-        {
-
-        };
-
         static char[,] Map = { {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', '-', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
@@ -77,7 +72,13 @@ namespace Aiden_GameLoop_GameProgramming1
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("You Have Died!\n");
 
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"Treasure Collected: {TreasureCollected}\n");
+
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Press Any Key To Quit...");
+                Thread.Sleep(2000);
+
                 Console.ReadKey(true);
             }
 
@@ -216,6 +217,12 @@ namespace Aiden_GameLoop_GameProgramming1
                             Console.BackgroundColor = ConsoleColor.Green;
                             isOnIsland = true;
                         }
+                        else if (Map[i, j] == '$')
+                        {
+                            TreasureCollected++;
+                            Map[i, j] = ' ';
+                            TreasureSpawnLimit--;
+                        }
                         else
                         {
                             isOnIsland = false;
@@ -239,7 +246,6 @@ namespace Aiden_GameLoop_GameProgramming1
                             if (TreasureSpawnChance == 0)
                             {
                                 TreasureSpawnLimit++;
-                                TreasureLocation.Add((i, j));
                                 Map[i, j] = '$';
                             }
                         }
@@ -268,6 +274,10 @@ namespace Aiden_GameLoop_GameProgramming1
                 Console.WriteLine();
 
             }
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"Treasure Collected: {TreasureCollected}");
 
         }
 
