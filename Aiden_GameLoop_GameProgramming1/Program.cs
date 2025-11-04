@@ -128,9 +128,35 @@ namespace Aiden_GameLoop_GameProgramming1
 
         static void ProcessInput()
         {
-            while(Console.KeyAvailable)
+            while (Console.KeyAvailable)
             {
+                var key = Console.ReadKey(true).Key;
 
+                float NewPlayerX = 0;
+                float NewPlayerY = 0;
+
+                NewPlayerX = PlayerPosition.Item2;
+                NewPlayerY = PlayerPosition.Item1;
+
+                switch (key)
+                {
+                    case ConsoleKey.W:
+                        if (NewPlayerY > 0) NewPlayerY--;
+                        break;
+
+                    case ConsoleKey.S:
+                        if(NewPlayerY < Map.GetLength(0) - 1) NewPlayerY++;
+                        break;
+                    case ConsoleKey.A:
+                        if (NewPlayerX > 0) NewPlayerX--;
+                        break;
+
+                    case ConsoleKey.D:
+                        if (NewPlayerX < Map.GetLength(1) - 1) NewPlayerX++;
+                        break;
+                }
+
+                PlayerPosition = ((int)NewPlayerY, (int)NewPlayerX);
             }
         }
     }
