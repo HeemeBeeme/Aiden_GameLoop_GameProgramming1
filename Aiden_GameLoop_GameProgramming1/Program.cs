@@ -15,6 +15,10 @@ namespace Aiden_GameLoop_GameProgramming1
         static int FrameTime = 34;
         static int movetime = 0;
 
+        static int TreasureCollected = 0;
+        static int TreasureSpawnChance;
+        static int TreasureSpawnLimit = 0;
+
         static (int, int) SharkPosition = (7, 20);
         static (int, int) PlayerPosition = (5, 4);
 
@@ -28,6 +32,13 @@ namespace Aiden_GameLoop_GameProgramming1
 
         static bool isDead = false;
         static bool isOnIsland = false;
+
+        static Random TreasureSpawnChanceRnD = new Random();
+
+        static List<(int, int)> TreasureLocation = new List<(int, int)>
+        {
+
+        };
 
         static char[,] Map = { {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
                                {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',},
@@ -97,7 +108,7 @@ namespace Aiden_GameLoop_GameProgramming1
                         NewSharkX = (float)Math.Round(NewSharkPositionX);
                         NewSharkY = (float)Math.Round(NewSharkPositionY);
 
-                        if (Map[(int)NewSharkY, (int)NewSharkX] == ' ')
+                        if (Map[(int)NewSharkY, (int)NewSharkX] == ' ' || Map[(int)NewSharkY, (int)NewSharkX] == '$')
                         {
                             SharkPosition = ((int)NewSharkY, (int)NewSharkX);
                         }
@@ -209,24 +220,35 @@ namespace Aiden_GameLoop_GameProgramming1
                         {
                             isOnIsland = false;
                         }
-                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.Write(Character);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
                     else if (j == SharkPosition.Item2 && i == SharkPosition.Item1)
                     {
-                        if (Map[i, j] == '-')
-                        {
-                            Console.BackgroundColor = ConsoleColor.Green;
-                        }
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write(Shark);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
                     else if (Map[i, j] == ' ')
                     {
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        Console.Write(Map[i, j]);
+                        if (TreasureSpawnLimit < 4)
+                        {
+                            TreasureSpawnChance = TreasureSpawnChanceRnD.Next(0, 150);
+
+                            if (TreasureSpawnChance == 0)
+                            {
+                                TreasureSpawnLimit++;
+                                TreasureLocation.Add((i, j));
+                                Map[i, j] = '$';
+                            }
+                        }
+                        else
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkBlue;
+                            Console.Write(Map[i, j]);
+                        }
+
                     }
                     else if (Map[i, j] == '-')
                     {
@@ -235,12 +257,18 @@ namespace Aiden_GameLoop_GameProgramming1
                         Console.Write(Map[i, j]);
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                     }
+                    else if (Map[i, j] == '$')
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("$");
+                    }
                 }
 
                 Console.WriteLine();
 
             }
-            
+
         }
 
         static void ProcessInput()
